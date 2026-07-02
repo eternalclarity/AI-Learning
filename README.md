@@ -2,7 +2,7 @@
   <img src="assets/banner.png" alt="Summer AI Learning Banner" width="100%">
 </p>
 
-# 研一学习计划（7.1—9.1）
+# AI-Learning（7.1—9.1）
 
 ## 第 1 周：7.1—7.7  
 
