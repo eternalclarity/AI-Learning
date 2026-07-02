@@ -1,0 +1,40 @@
+# Basic scientific computing
+numpy
+pandas
+matplotlib
+scikit-learn
+
+# Jupyter environment
+jupyter
+notebook
+ipykernel
+
+# PyTorch ecosystem
+torch
+torchvision
+torchaudio
+
+# Deep learning / NLP / LLM
+transformers
+datasets
+accelerate
+tokenizers
+sentencepiece
+
+# Embedding and RAG
+sentence-transformers
+faiss-cpu
+chromadb
+
+# Agent / LLM application framework
+langchain
+langchain-community
+
+# PDF / document processing
+pypdf
+python-docx
+
+# Utilities
+tqdm
+requests
+python-dotenv
