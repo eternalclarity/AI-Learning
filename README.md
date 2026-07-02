@@ -1,3 +1,5 @@
+![banner](D:\code.py\workspace\AI-Learning\assets\banner.png)
+
 # 研一学习计划（7.1—9.1）
 
 ## 第 1 周：7.1—7.7  
