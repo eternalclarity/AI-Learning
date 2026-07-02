@@ -1,4 +1,6 @@
-![banner](D:\code.py\workspace\AI-Learning\assets\banner.png)
+<p align="center">
+  <img src="assets/banner.png" alt="Summer AI Learning Banner" width="100%">
+</p>
 
 # 研一学习计划（7.1—9.1）
 
