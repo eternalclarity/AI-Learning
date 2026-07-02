@@ -2,6 +2,39 @@
   <img src="assets/banner.png" alt="Summer AI Learning Banner" width="100%">
 </p>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/python-3.10+-3776AB?style=flat&logo=python&logoColor=white">
+  <img src="https://img.shields.io/badge/pytorch-deep%20learning-EE4C2C?style=flat&logo=pytorch&logoColor=white">
+  <img src="https://img.shields.io/badge/huggingface-LLMs-FFD21E?style=flat&logo=huggingface&logoColor=black">
+  <img src="https://img.shields.io/badge/RAG-document%20QA-2E8B57?style=flat">
+  <img src="https://img.shields.io/badge/Agent-tools%20%26%20planning-6A5ACD?style=flat">
+</p>
+
+<p align="center">
+  <a href="week01_python_review/">
+    <img src="https://img.shields.io/badge/Week%2001-Python%20Review-3776AB?style=flat-square&logo=python&logoColor=white">
+  </a>
+  <a href="week02_pytorch_basic/">
+    <img src="https://img.shields.io/badge/Week%2002-PyTorch%20Basics-EE4C2C?style=flat-square&logo=pytorch&logoColor=white">
+  </a>
+  <a href="week06_transformer_llm/">
+    <img src="https://img.shields.io/badge/Week%2006-Transformer%20%26%20LLM-FFD21E?style=flat-square&logo=huggingface&logoColor=black">
+  </a>
+  <a href="week07_rag/">
+    <img src="https://img.shields.io/badge/Week%2007-RAG-2E8B57?style=flat-square">
+  </a>
+  <a href="week08_agent/">
+    <img src="https://img.shields.io/badge/Week%2008-Agent-6A5ACD?style=flat-square">
+  </a>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/status-in%20progress-007ACC?style=flat-square">
+  <img src="https://img.shields.io/badge/timeline-Jul--Sep%202026-555555?style=flat-square">
+  <img src="https://img.shields.io/badge/output-notes%20%7C%20experiments%20%7C%20projects-brightgreen?style=flat-square">
+</p>
+
+
 # AI-Learning（7.1—9.1）
 
 ## 第 1 周：7.1—7.7  
