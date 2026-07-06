@@ -1,21 +1,13 @@
 """
-01_file_io.py
+file_io.py
 
-本脚本用于练习 Python 文件读写、pathlib 路径处理、函数封装和异常处理。
+练习 Python 文件读写、pathlib 路径处理、函数封装和异常处理。
 
-功能：
 1. 读取一个文本文件；
 2. 统计文件中的行数、单词数、字符数；
 3. 输出统计结果；
 4. 如果示例文件不存在，可以自动创建一个 sample.txt。
 
-运行方式：
-
-python week1_python_review/scripts/01_file_io.py
-
-或者指定文件：
-
-python week1_python_review/scripts/01_file_io.py --file week1_python_review/scripts/sample.txt
 """
 
 from pathlib import Path
@@ -25,9 +17,6 @@ import argparse
 def create_sample_file(file_path: Path) -> None:
     """
     创建一个示例文本文件。
-
-    参数：
-        file_path: 要创建的文件路径
     """
     sample_text = """Python is useful for AI research.
 NumPy is used for numerical computing.
@@ -45,12 +34,6 @@ Git is useful for code management.
 def analyze_file(file_path: Path) -> dict:
     """
     分析文本文件，统计行数、单词数和字符数。
-
-    参数：
-        file_path: 文本文件路径
-
-    返回：
-        一个字典，包含 lines、words、chars 三个统计结果
     """
     if not file_path.exists():
         raise FileNotFoundError(f"文件不存在: {file_path}")

@@ -1,21 +1,9 @@
 """
-02_argparse_logging.py
+argparse_logging.py
 
-本脚本用于练习 argparse 和 logging。
+练习 argparse 和 logging。
 
-在深度学习训练代码中，经常需要通过命令行传入参数，例如：
-
-python train.py --lr 0.001 --epochs 10 --batch_size 32
-
-所以本脚本模拟了一个简单的训练配置程序。
-
-运行方式：
-
-python week1_python_review/scripts/02_argparse_logging.py
-
-自定义参数运行：
-
-python week1_python_review/scripts/02_argparse_logging.py --lr 0.01 --epochs 5 --batch_size 16
+自定义参数运行： python week1_python_review/argparse_logging.py --lr 0.01 --epochs 5 --batch_size 16
 """
 
 import argparse
@@ -27,11 +15,6 @@ from pathlib import Path
 def setup_logger(log_file: str = "week1_python_review/scripts/train.log") -> None:
     """
     配置日志系统。
-
-    日志会同时输出到终端和文件。
-
-    参数：
-        log_file: 日志文件路径
     """
     log_path = Path(log_file)
     log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -49,11 +32,6 @@ def setup_logger(log_file: str = "week1_python_review/scripts/train.log") -> Non
 def set_seed(seed: int) -> None:
     """
     设置随机种子。
-
-    在机器学习实验中，设置随机种子可以让实验结果更容易复现。
-
-    参数：
-        seed: 随机种子
     """
     random.seed(seed)
 
@@ -61,9 +39,6 @@ def set_seed(seed: int) -> None:
 def simulate_training(epochs: int, lr: float, batch_size: int) -> None:
     """
     模拟一个训练过程。
-
-    这里不是真的训练模型，只是为了演示日志输出和参数传递。
-
     参数：
         epochs: 训练轮数
         lr: 学习率
@@ -74,10 +49,12 @@ def simulate_training(epochs: int, lr: float, batch_size: int) -> None:
     logging.info(f"训练轮数 epochs = {epochs}")
     logging.info(f"批大小 batch_size = {batch_size}")
 
+    # 损失值
     loss = 1.0
 
     for epoch in range(1, epochs + 1):
         # 模拟 loss 逐渐下降
+        # 随机噪声 (-0.03, 0.03)
         noise = random.uniform(-0.03, 0.03)
         loss = loss * 0.85 + noise
 
