@@ -1,0 +1,5 @@
+Python is useful for AI research.
+NumPy is used for numerical computing.
+Pandas is used for data analysis.
+Matplotlib is used for data visualization.
+Git is useful for code management.

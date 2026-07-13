@@ -1,0 +1,7 @@
+﻿name,gender,score,study_hours,passed
+Tom,male,85,5,True
+Jerry,male,90,6,True
+Alice,female,78,3,True
+Bob,male,92,7,True
+Mike,male,66,2,True
+Lucy,female,88,6,True
