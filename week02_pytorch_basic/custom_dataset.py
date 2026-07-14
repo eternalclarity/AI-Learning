@@ -92,10 +92,13 @@ def main():
         遍历 DataLoader 中的所有批次
         
         dataloader 每次会返回：(一个批次的 features, 一个批次的 labels) -> (features, labels)
+            - features: tensor[batch_size, 2]
+            - labels: tensor[batch_size, 1]
+            - batch_size 是 dataloader返回的
         
         enumerate(..., start=1)：  为每个批次添加编号，并从 1 开始编号 -> batch_index
     """
-    for batch_index, (features, labels) in enumerate(dataloader, start=1):
+    for batch_index, features, labels in enumerate(dataloader, start=1):
         print("=" * 50)
         print(f"Batch {batch_index}")
         print("Features:")

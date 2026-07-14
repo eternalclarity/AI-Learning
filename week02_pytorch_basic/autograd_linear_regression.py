@@ -137,7 +137,7 @@ def train_with_optimizer(
 
         optimizer.zero_grad()   # 3. 清空上一轮保存的梯度
 
-        loss.backward()     # 4. 反向传播，自动计算模型参数的梯度
+        loss.backward()     # 4. 反向传播，自动计算模型参数的梯度 -> loss.item()获取loss值用于累加
 
         optimizer.step()    # 5. 根据刚才计算出的梯度更新模型参数
 

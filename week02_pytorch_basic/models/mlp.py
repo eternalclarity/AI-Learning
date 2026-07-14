@@ -23,12 +23,15 @@ class MLP(nn.Module):
     用于 28 × 28 灰度 图片分类的多层感知机。
     - 输入形状： [batch_size, 1, 28, 28]
         各维度含义：
-        batch_size： 一个批次中的图片数量。
+        batch_size： 一个批次中的图片数量。 -> batch_size批次来源于 dataloader
         1： 灰度图片只有一个颜色通道。
         28, 28： 图片的高度和宽度。
 
     - 输出形状： [batch_size, num_classes]
         例如 batch_size=32，num_classes=10： [32, 10] 表示： 一共有 32 张图片； 每张图片输出 10 个类别分数。
+
+    -  nn.Linear(in_features, out_features) 永远只处理输入张量的最后一维
+        images: tensor[batch_size, 1, 28, 28] -> nn.Flatten() -> tensor[batch_size, 784] -> in_features = 784
     """
 
     def __init__(
