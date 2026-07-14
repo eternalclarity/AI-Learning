@@ -1,6 +1,6 @@
 """
-用于 FashionMNIST 数据集的简单多层感知机模型。
- MLP 是 Multilayer Perceptron 的缩写， 中文通常称为多层感知机。
+定义一个用于 FashionMNIST 数据集的简单多层感知机模型。
+ (MLP 是 Multilayer Perceptron 的缩写， 中文通常称为多层感知机)
 
  FashionMNIST 中的每张图片是：
     28 × 28 的 灰度 图片 -> 28 * 28 * 1
@@ -56,7 +56,8 @@ class MLP(nn.Module):
 
         self.flatten = nn.Flatten()     # 创建 Flatten 层，将每张多维图片展开成一维特征：[batch_size, 1, 28, 28] -> [batch_size, 784]
         self.network = nn.Sequential(   # 使用 nn.Sequential 按顺序组合多个网络层
-            nn.Linear(input_size, hidden_size1),    # 第一层全连接层 [batch_size, 784] -> [batch_size, 256]
+            # nn.Linear(in_features, out_features) 永远只处理输入张量的最后一维
+            nn.Linear(input_size, hidden_size1),    # 第一层全连接层 [batch_size, 784] -> [batch_size, 256] ;
             nn.ReLU(),                              # ReLU 激活函数 ReLU(x) = max(0, x), 激活函数可以让模型拥有非线性表达能力
             nn.Dropout(dropout),                    # 第一层 Dropout, 表示随机丢弃 20% 的输出, 主要作用是减少过拟合
 
