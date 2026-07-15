@@ -194,6 +194,7 @@ def validate(
     在验证集上评估模型
     验证过程不会更新模型参数.
      """
+
     model.eval()        # 将模型切换到评估模式
 
     total_loss = 0.0
