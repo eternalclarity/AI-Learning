@@ -32,6 +32,8 @@ class MLP(nn.Module):
 
     -  nn.Linear(in_features, out_features) 永远只处理输入张量的最后一维
         images: tensor[batch_size, 1, 28, 28] -> nn.Flatten() -> tensor[batch_size, 784] -> in_features = 784
+
+    nn.Linear参数量 = in_features × out_features + out_features
     """
 
     def __init__(
