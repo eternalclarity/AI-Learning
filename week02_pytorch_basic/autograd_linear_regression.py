@@ -70,7 +70,7 @@ def train_manual(
 
         loss.backward()  # 反向传播 loss对 w 的梯度 w.grad.item() 和 loss 对 b 的梯度 b.grad.item()
 
-        # 暂时关闭自动求导, 更新参数
+        # 暂时关闭自动求导, 更新参数 -> 梯度下降
         with torch.no_grad():
             w -= learning_rate * w.grad
             b -= learning_rate * b.grad
@@ -124,7 +124,7 @@ def train_with_optimizer(
 
     loss_fn = nn.MSELoss()  # 创建 均方误差(Mean Squared Error) 损失函数
 
-    optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)   # 创建 随机梯度下降(Stochastic Gradient Descent) 优化器
+    optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)   # 创建 随机 梯度下降 (Stochastic Gradient Descent) 优化器 -> 梯度下降,从而在 loss-w,b 的三维曲面函数中下山 -> loss下降
 
     loss_history: list[float] = []
 
