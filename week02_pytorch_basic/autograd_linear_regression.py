@@ -72,7 +72,7 @@ def train_manual(
 
         # 暂时关闭自动求导, 更新参数 -> 梯度下降
         with torch.no_grad():
-            w -= learning_rate * w.grad
+            w -= learning_rate * w.grad  # 学习率,lr(吴恩达里也做a) -> 控制梯度下降都幅度
             b -= learning_rate * b.grad
 
         # PyTorch 默认会累加梯度.因此完成一次参数更新后，需要手动清空 w 的梯度
