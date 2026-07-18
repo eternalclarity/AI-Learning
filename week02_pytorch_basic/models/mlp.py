@@ -64,7 +64,7 @@ class MLP(nn.Module):
             # nn.Linear(in_features, out_features) 永远只处理输入张量的最后一维
             nn.Linear(input_size, hidden_size1),    # 第一层全连接层 [batch_size, 784] -> [batch_size, 256] ;
             nn.ReLU(),                              # ReLU 激活函数 ReLU(x) = max(0, x), 激活函数可以让模型拥有非线性表达能力
-            nn.Dropout(dropout),                    # 第一层 Dropout, 表示随机丢弃 20% 的输出, 主要作用是减少过拟合
+            nn.Dropout(dropout),                    # 第一层 Dropout, 表示是每个 batch 都随机丢弃 20% 的输出, 主要作用是减少过拟合
 
             nn.Linear(hidden_size1, hidden_size2),  # 第二层全连接层 [batch_size, 256] -> [batch_size, 128]
             nn.ReLU(),                              # 第二个 ReLU 激活函数
