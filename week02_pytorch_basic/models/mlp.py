@@ -76,7 +76,7 @@ class MLP(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """ 执行一次前向传播，并返回每个类别的 logits"""
         x = self.flatten(x)             # 将图片展开
-        logits = self.network(x)        # 将展开后的数据传入整个神经网络
+        logits = self.network(x)        # 将展开后的数据传入整个神经网络, logits（逻辑值 / 未归一化分数）：模型最后一层直接输出的原始分数，还没有转换成概率
         return logits                   # [batch_size, num_classes]
 
     def get_config(self) -> dict:
