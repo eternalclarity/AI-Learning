@@ -88,12 +88,3 @@ class MLP(nn.Module):
             "dropout": self.dropout,
         }
 
-
-if __name__ == "__main__":
-    model = MLP()
-    dummy_input = torch.randn(32, 1, 28, 28)
-    output = model(dummy_input)
-
-    print(model)
-    print(f"Input shape:  {tuple(dummy_input.shape)}")
-    print(f"Output shape: {tuple(output.shape)}")

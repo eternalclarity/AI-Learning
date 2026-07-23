@@ -10,6 +10,8 @@
 7. 计算每一个服装类别的准确率；
 8. 打印部分测试图片的预测结果；
 9. 将测试样本拼成图片并保存.
+
+10. 切换模型： 1. 改保存参数 2. 改模型类声明
 """
 
 from __future__ import annotations
@@ -24,7 +26,7 @@ from torch.utils.data import DataLoader
 from torchvision import datasets
 from torchvision.utils import make_grid     # make_grid 可以把多张小图片拼成一张网格大图。
 
-from models import MLP
+from models import MLP, BasicCNN, ImprovedCNN
 from utils import (
     FASHION_MNIST_CLASSES,
     get_device,
@@ -43,7 +45,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--checkpoint",
         type=Path,
-        default=BASE_DIR / "outputs" / "checkpoints" / "best_model.pth",
+        default=BASE_DIR / "outputs" / "I_CNN" / "checkpoints" / "best_model.pth",
     )
     parser.add_argument("--batch-size", type=int, default=128)
     parser.add_argument("--num-workers", type=int, default=0)
@@ -52,7 +54,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--sample-image",
         type=Path,
-        default=BASE_DIR / "outputs" / "plots" / "sample_predictions.png",
+        default=BASE_DIR / "outputs" / "I_CNN" / "plots" / "sample_predictions.png",
     )
     parser.add_argument("--sample-count", type=int, default=16)
     return parser.parse_args()
@@ -180,9 +182,12 @@ def main() -> None:
     model_config = checkpoint.get("model_config", {})
     class_names = checkpoint.get("class_names", FASHION_MNIST_CLASSES)
 
-    # 根据检查点中保存的配置重新创建 MLP
-    model = MLP(**model_config)
-    # 将检查点中保存的模型参数加载到刚创建的 MLP 中
+    # 根据检查点中保存的配置重新创建 model
+    # model = MLP(**model_config)
+    # model = BasicCNN(**model_config)
+    model = ImprovedCNN(**model_config)
+
+    # 将检查点中保存的模型参数加载到刚创建的 model 中
     model.load_state_dict(checkpoint["model_state_dict"])
     # 将模型移动到指定设备
     model.to(device)

@@ -1,5 +1,5 @@
 """
-使用 MLP 模型训练 FashionMNIST 图像分类任务。
+使用 models 模型训练 FashionMNIST 图像分类任务。
 
 主要完成：
 1. 解析命令行参数；
@@ -10,6 +10,8 @@
 6. 逐轮训练和验证；
 7. 保存最佳模型和最后一轮模型；
 8. 保存训练历史并绘制曲线。
+
+9. 切换模型： 1. 改保存参数 2. 改模型类声明
 """
 
 from __future__ import annotations
@@ -22,7 +24,8 @@ from torch import nn
 from torch.utils.data import DataLoader, random_split   # random_split：负责按照指定长度随机拆分数据集,用于拆分训练集和验证集
 from torchvision import datasets    # torchvision.datasets 提供了很多常见图像数据集,  其中包括 FashionMNIST
 
-from models import MLP
+from models import MLP, BasicCNN, ImprovedCNN
+
 from utils import (
     count_trainable_parameters, # 统计模型中可以训练的参数数量
     ensure_output_directories,  # 创建输出目录
@@ -43,7 +46,7 @@ def parse_args() -> argparse.Namespace:
     解析用户运行 train.py 时传入的命令行参数。 。
     """
 
-    parser = argparse.ArgumentParser(description="Train an MLP on FashionMNIST")
+    parser = argparse.ArgumentParser(description="Train Models on FashionMNIST")
 
     parser.add_argument("--epochs", type=int, default=10)   # 添加训练轮数参数
     parser.add_argument("--batch-size", type=int, default=64)   # 添加批次大小参数
@@ -71,7 +74,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--seed", type=int, default=42) # 随机种子
     parser.add_argument("--no-cuda", action="store_true")   # 添加是否禁用 CUDA 的参数
     parser.add_argument("--data-dir", type=Path, default=BASE_DIR / "data") # 数据集保存目录
-    parser.add_argument("--output-dir", type=Path, default=BASE_DIR / "outputs") # 训练输出目录
+    parser.add_argument("--output-dir", type=Path, default=BASE_DIR / "outputs" / "I_CNN") # 训练输出目录
 
     return parser.parse_args()
 
@@ -172,7 +175,7 @@ def train_one_epoch(
 
         optimizer.zero_grad(set_to_none=True)   # 3. 清空上一轮的梯度: set_to_none=True 表示：将梯度设置为 None，而不是设置成全 0 Tensor, 更加节省内存
         loss.backward()                 # 4. 反向传播: 计算参数梯度
-        optimizer.step()                # 5. 更新参数: Optim.Adam
+        optimizer.step()                # 5. 梯度下降, 更新参数: Optim.Adam
 
         batch_size = labels.size(0)     # 最后一批：获取当前批次的实际样本数量, labels.size(0) 就是当前批次包含的样本数
         total_loss += loss.item() * batch_size  # 累计当前批次的损失总和
@@ -227,7 +230,7 @@ def main() -> None:
     output_paths = ensure_output_directories(args.output_dir)
 
     print("=" * 70)
-    print("FashionMNIST MLP training")
+    print("FashionMNIST Models training")
     print("=" * 70)
     print(f"Device: {device}")
     if device.type == "cuda":
@@ -244,8 +247,17 @@ def main() -> None:
     )
 
     # 3. model
-    model = MLP(
-        hidden_sizes=(args.hidden_size1, args.hidden_size2),
+    # MLP model
+    # model = MLP(
+    #     hidden_sizes=(args.hidden_size1, args.hidden_size2),
+    #     dropout=args.dropout,
+    # ).to(device)
+
+    # BasicCNN model
+    # model = BasicCNN().to(device)
+
+    # Improve model
+    model = ImprovedCNN(
         dropout=args.dropout,
     ).to(device)
 
