@@ -54,7 +54,7 @@ class BasicCNN(nn.Module):
 
         # 创建负责根据提取到的特征完成最终分类的全连接部分。
         self.classifier = nn.Sequential(
-            # 把 [batch, 64, 7, 7] 展平成 [batch, 3136]。
+            # 把 [batch, 64, 7, 7] 展平成 [batch, 3136]。·
             nn.Flatten(),
             # 把 3136 个特征压缩成 128 个综合特征。
             nn.Linear(in_features=64 * 7 * 7, out_features=128),

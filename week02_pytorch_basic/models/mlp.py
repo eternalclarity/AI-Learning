@@ -59,7 +59,7 @@ class MLP(nn.Module):
         self.num_classes = num_classes  # 保存分类类别数量
         self.dropout = dropout  # 保存 Dropout 概率
 
-        self.flatten = nn.Flatten()     # 创建 Flatten 层，将每张多维图片展开成一维特征：[batch_size, 1, 28, 28] -> [batch_size, 784]
+        self.flatten = nn.Flatten()     # 创建 Flatten 层，将每张多维图片展开成一维特征（4维->2维）：[batch_size, 1, 28, 28] -> [batch_size, 784]
         self.network = nn.Sequential(   # 使用 nn.Sequential 按顺序组合多个网络层
             # nn.Linear(in_features, out_features) 永远只处理输入张量的最后一维
             nn.Linear(input_size, hidden_size1),    # 第一层全连接层 [batch_size, 784] -> [batch_size, 256] ;

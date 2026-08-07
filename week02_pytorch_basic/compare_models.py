@@ -1,7 +1,7 @@
 """
-对比 三个模型在 训练，验证，测试集上的结果
+对比 模型在 训练，验证，测试集上的结果
 
-1. 从三个模型各自的 history.json 中读取训练历史；
+1. 从模型各自的 history.json 中读取训练历史；
 2. 绘制训练集和验证集上的损失、准确率变化曲线；
 3. 根据给定的测试集指标，绘制测试损失和测试准确率柱状图。
 """
@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent
 
 # 将文件夹名称、显示名称和颜色集中管理，
 # 外层字典的键：
-# - MLP、B_CNN、I_CNN 同时也是 outputs 目录下对应的文件夹名称；
+# - MLP、B_CNN、I_CNN、ResNet 同时也是 outputs 目录下对应的文件夹名称；
 # - 后续读取 history.json、读取测试指标和绘图时都会使用这些键。
 #
 # 内层字典的字段：
@@ -37,13 +37,15 @@ MODEL_SETTINGS = {
     "MLP": {"label": "MLP", "color": "#4C78A8"},
     "B_CNN": {"label": "Basic CNN", "color": "#F58518"},
     "I_CNN": {"label": "Improved CNN", "color": "#54A24B"},
+    "ResNet": {"label": "Small ResNet", "color": "#B279A2"},
 }
 
-# 保存三个模型最终的测试集指标
+# 保存四个模型最终的测试集指标
 TEST_METRICS = {
     "MLP": {"test_loss": 0.3252, "test_accuracy": 88.61},
     "B_CNN": {"test_loss": 0.2460, "test_accuracy": 91.89},
     "I_CNN": {"test_loss": 0.2217, "test_accuracy": 92.37},
+    "ResNet": {"test_loss": 0.2061, "test_accuracy": 93.01},
 }
 
 # 定义每个 history.json 必须包含的四项训练历史
@@ -61,13 +63,13 @@ def parse_args() -> argparse.Namespace:
     """
 
     parser = argparse.ArgumentParser(
-        description="Plot result comparisons for MLP, Basic CNN, and Improved CNN."
+        description="Plot result comparisons for MLP, Basic CNN, Improved CNN, and ResNet."
     )
     parser.add_argument(
         "--outputs-dir",
         type=Path,
         default=BASE_DIR / "outputs",
-        help="Directory containing the MLP, B_CNN, and I_CNN output folders.",
+        help="Directory containing the MLP, B_CNN, I_CNN, and ResNet output folders.",
     )
     parser.add_argument(
         "--save-dir",
@@ -115,7 +117,7 @@ def plot_metric_curves(
     y_label: str,
 ) -> None:
     """
-    在同一坐标轴上绘制三个模型的一项指标。
+    在同一坐标轴上绘制四个模型的一项指标。
 
     Args:
         axis:
@@ -123,7 +125,7 @@ def plot_metric_curves(
             曲线会被绘制在该坐标轴中。
 
         histories:
-            三个模型的完整训练历史。
+            四个模型的完整训练历史。
 
         metric_key:
             需要绘制的字段名，例如：
@@ -148,7 +150,7 @@ def plot_metric_curves(
             不需要单独返回新的坐标轴对象。
     """
 
-    # 3 组数据
+    # 4 组数据
     for model_name, settings in MODEL_SETTINGS.items():
         values = histories[model_name][metric_key]
         epochs = range(1, len(values) + 1)
@@ -176,10 +178,10 @@ def save_training_comparison(
     """
     生成并保存训练集指标对比图
        左侧子图：
-        三个模型的训练损失变化。
+        四个模型的训练损失变化。
 
         右侧子图：
-        三个模型的训练准确率变化。
+        四个模型的训练准确率变化。
     """
 
     # 表示创建一张画布，画布中有两张子图
@@ -204,10 +206,10 @@ def save_validation_comparison(
     生成并保存验证集指标对比图。
 
     左侧子图：
-        三个模型的验证损失变化。
+        四个模型的验证损失变化。
 
     右侧子图：
-        三个模型的验证准确率变化
+        四个模型的验证准确率变化
     """
     figure, axes = plt.subplots(1, 2, figsize=(14, 5.5))
 

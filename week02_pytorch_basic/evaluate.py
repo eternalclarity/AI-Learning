@@ -26,7 +26,7 @@ from torch.utils.data import DataLoader
 from torchvision import datasets
 from torchvision.utils import make_grid     # make_grid 可以把多张小图片拼成一张网格大图。
 
-from models import MLP, BasicCNN, ImprovedCNN
+from models import MLP, BasicCNN, ImprovedCNN, SmallResNet
 from utils import (
     FASHION_MNIST_CLASSES,
     get_device,
@@ -45,7 +45,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--checkpoint",
         type=Path,
-        default=BASE_DIR / "outputs" / "I_CNN" / "checkpoints" / "best_model.pth",
+        default=BASE_DIR / "outputs" / "ResNet" / "checkpoints" / "best_model.pth",
     )
     parser.add_argument("--batch-size", type=int, default=128)
     parser.add_argument("--num-workers", type=int, default=0)
@@ -54,7 +54,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--sample-image",
         type=Path,
-        default=BASE_DIR / "outputs" / "I_CNN" / "plots" / "sample_predictions.png",
+        default=BASE_DIR / "outputs" / "ResNet" / "plots" / "sample_predictions.png",
     )
     parser.add_argument("--sample-count", type=int, default=16)
     return parser.parse_args()
@@ -143,7 +143,7 @@ def save_sample_predictions(
 
     with torch.no_grad():
         logits = model(images.to(device))
-        predictions = logits.argmax(dim=1).cpu()
+        predictions = logits.argmax(dim=1).cpu()  # argmax，与softmax相对
 
     print("\nSample predictions")
     for index, (prediction, label) in enumerate(zip(predictions, labels), start=1):
@@ -185,7 +185,8 @@ def main() -> None:
     # 根据检查点中保存的配置重新创建 model
     # model = MLP(**model_config)
     # model = BasicCNN(**model_config)
-    model = ImprovedCNN(**model_config)
+    # model = ImprovedCNN(**model_config)
+    model = SmallResNet(**model_config)
 
     # 将检查点中保存的模型参数加载到刚创建的 model 中
     model.load_state_dict(checkpoint["model_state_dict"])

@@ -24,7 +24,7 @@ from torch import nn
 from torch.utils.data import DataLoader, random_split   # random_split：负责按照指定长度随机拆分数据集,用于拆分训练集和验证集
 from torchvision import datasets    # torchvision.datasets 提供了很多常见图像数据集,  其中包括 FashionMNIST
 
-from models import MLP, BasicCNN, ImprovedCNN
+from models import MLP, BasicCNN, ImprovedCNN, SmallResNet
 
 from utils import (
     count_trainable_parameters, # 统计模型中可以训练的参数数量
@@ -51,7 +51,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--epochs", type=int, default=10)   # 添加训练轮数参数
     parser.add_argument("--batch-size", type=int, default=64)   # 添加批次大小参数
     parser.add_argument("--lr", type=float, default=1e-3)       # 添加学习率参数
-    parser.add_argument("--weight-decay", type=float, default=0.0)  # 添加权重衰减参数, weight_decay 通常用于 L2 正则化,可以在一定程度上减少模型过拟合
+    parser.add_argument("--weight-decay", type=float, default=0)  # 添加权重衰减参数, weight_decay 通常用于 L2 正则化,可以在一定程度上减少模型过拟合
 
     """
     过拟合: 模型“学过头了” -> 把训练集噪声和偶然特征也学去了 -> 模型泛化能力差
@@ -74,7 +74,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--seed", type=int, default=42) # 随机种子
     parser.add_argument("--no-cuda", action="store_true")   # 添加是否禁用 CUDA 的参数
     parser.add_argument("--data-dir", type=Path, default=BASE_DIR / "data") # 数据集保存目录
-    parser.add_argument("--output-dir", type=Path, default=BASE_DIR / "outputs" / "I_CNN") # 训练输出目录
+    parser.add_argument("--output-dir", type=Path, default=BASE_DIR / "outputs" / "ResNet") # 训练输出目录
 
     return parser.parse_args()
 
@@ -131,7 +131,7 @@ def create_dataloaders(
         training_dataset,
         batch_size=batch_size,
         shuffle=True,               # 每个epoch 训练集需要打乱,避免模型总是按照完全相同的顺序看到数据
-        num_workers=num_workers,    # 数据加载子进程数量
+        num_workers=num_workers,    # 数据加载子进程数量 -> 读取数据需要比训练模型快
         pin_memory=use_pin_memory,  # 使用 GPU 时，可以使用锁页内存
         generator=loader_generator, # 控制 shuffle 的随机性
     )
@@ -257,7 +257,12 @@ def main() -> None:
     # model = BasicCNN().to(device)
 
     # Improve model
-    model = ImprovedCNN(
+    # model = ImprovedCNN(
+    #     dropout=args.dropout,
+    # ).to(device)
+
+    # ResNet
+    model = SmallResNet(
         dropout=args.dropout,
     ).to(device)
 
