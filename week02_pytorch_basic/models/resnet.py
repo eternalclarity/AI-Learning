@@ -1,5 +1,5 @@
 """
-改进三：设计的小型残差网络 ResNet
+改进三：设计的小型残差网络 ResNet-14
 """
 
 import torch
