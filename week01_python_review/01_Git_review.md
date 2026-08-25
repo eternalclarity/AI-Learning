@@ -8,6 +8,8 @@
 
 <img src="D:\code.py\workspace\AI-Learning\week01_python_review\notes\屏幕截图 2026-08-18 100525.jpg" alt="屏幕截图 2026-08-18 100525" style="zoom:80%;" />
 
+![Codex 图像 2026年8月19日 08_26_17](D:\code.py\workspace\AI-Learning\week01_python_review\notes\Codex 图像 2026年8月19日 08_26_17.png)
+
 Git 日常操作最核心的流程只有这一条：
 
 ```
