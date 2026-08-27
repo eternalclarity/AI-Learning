@@ -1,0 +1,24 @@
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Downloaded datasets
+**/data/raw/*
+!**/data/raw/.gitkeep
+
+# Prepared artifacts
+**/artifacts/*
+!**/artifacts/.gitkeep
+
+# Training outputs
+**/outputs/checkpoints/*
+!**/outputs/checkpoints/.gitkeep
+**/outputs/plots/*
+!**/outputs/plots/.gitkeep
+**/outputs/results/*
+!**/outputs/results/.gitkeep
+
+# Local environments
+.venv/
+venv/
+.env
