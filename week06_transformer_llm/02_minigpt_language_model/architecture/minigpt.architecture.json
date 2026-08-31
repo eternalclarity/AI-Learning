@@ -1,0 +1,230 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Week 06 · MiniGPT 项目架构",
+    "locale": "zh-CN",
+    "output": "minigpt-architecture.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/eternalclarity/AI-Learning.git",
+      "revision": "035011e361f2611cc0d30a20322ac2d877a0f15e"
+    },
+    "views": [
+      {
+        "id": "training-path",
+        "label": "训练主链路",
+        "focus": ["tiny-shakespeare", "data-preparation", "artifact-store", "sample-batch", "training-loop", "gpt-core", "checkpoints"],
+        "note": "从原始文本、字符级制品和随机连续 block，一路跟到参数更新与 best/last checkpoint。"
+      },
+      {
+        "id": "model-internals",
+        "label": "模型内部",
+        "focus": ["attention-backends", "gpt-core", "kv-cache", "lora-extension"],
+        "note": "聚焦 Decoder-only GPT、两种 Attention 后端、逐层 K/V 缓存和可选 LoRA 扩展。"
+      },
+      {
+        "id": "inference-path",
+        "label": "生成与缓存",
+        "focus": ["checkpoints", "generate-cli", "kv-cache", "gpt-core"],
+        "note": "checkpoint 驱动迭代生成；缓存路径每步只送入最新 token，窗口满时重建。"
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "tiny-shakespeare",
+      "type": "external",
+      "label": "Tiny Shakespeare",
+      "sublabel": "input.txt · 连续英文文本",
+      "tag": "raw data",
+      "sources": [
+        { "path": "week06_transformer_llm/02_minigpt_language_model/download_data.py", "label": "下载入口" }
+      ],
+      "pos": [40, 60],
+      "size": [150, 72]
+    },
+    {
+      "id": "data-preparation",
+      "type": "backend",
+      "label": "数据准备",
+      "sublabel": "90/10 切分 + CharTokenizer",
+      "tag": "train-only vocab",
+      "sources": [
+        { "path": "week06_transformer_llm/02_minigpt_language_model/prepare_data.py", "label": "制品构建" },
+        { "path": "week06_transformer_llm/02_minigpt_language_model/tokenizer.py", "label": "字符级编码" }
+      ],
+      "pos": [360, 60],
+      "size": [170, 72]
+    },
+    {
+      "id": "artifact-store",
+      "type": "database",
+      "label": "训练制品",
+      "sublabel": "tokenizer.json · train.pt · val.pt",
+      "tag": "artifacts/",
+      "sources": [
+        { "path": "week06_transformer_llm/02_minigpt_language_model/prepare_data.py", "label": "持久化定义" }
+      ],
+      "pos": [720, 60],
+      "size": [175, 72]
+    },
+    {
+      "id": "sample-batch",
+      "type": "backend",
+      "label": "sample_batch",
+      "sublabel": "随机连续 x / 右移一位 y",
+      "tag": "[B,T]",
+      "sources": [
+        { "path": "week06_transformer_llm/02_minigpt_language_model/dataset.py", "label": "批采样" }
+      ],
+      "pos": [720, 250],
+      "size": [165, 72]
+    },
+    {
+      "id": "training-loop",
+      "type": "backend",
+      "label": "训练循环",
+      "sublabel": "AMP · AdamW · grad clip · eval",
+      "tag": "CrossEntropy + PPL",
+      "sources": [
+        { "path": "week06_transformer_llm/02_minigpt_language_model/train.py", "label": "训练入口" }
+      ],
+      "pos": [360, 250],
+      "size": [175, 78]
+    },
+    {
+      "id": "gpt-core",
+      "type": "backend",
+      "label": "GPT Model Core",
+      "sublabel": "Embedding · Blocks×N · LN · tied LM Head",
+      "tag": "Pre-LN Decoder-only",
+      "sources": [
+        { "path": "week06_transformer_llm/02_minigpt_language_model/model.py", "label": "GPT 与 Block" },
+        { "path": "week06_transformer_llm/02_minigpt_language_model/attention.py", "label": "因果自注意力" }
+      ],
+      "pos": [360, 440],
+      "size": [240, 88]
+    },
+    {
+      "id": "checkpoints",
+      "type": "database",
+      "label": "Checkpoints",
+      "sublabel": "best.pt · last.pt",
+      "tag": "state_dict + config",
+      "sources": [
+        { "path": "week06_transformer_llm/02_minigpt_language_model/train.py", "label": "保存逻辑" },
+        { "path": "week06_transformer_llm/02_minigpt_language_model/generate.py", "label": "加载逻辑" }
+      ],
+      "pos": [40, 440],
+      "size": [170, 72]
+    },
+    {
+      "id": "attention-backends",
+      "type": "backend",
+      "label": "CausalSelfAttention",
+      "sublabel": "manual QKᵀ / SDPA",
+      "tag": "shared QKV projection",
+      "sources": [
+        { "path": "week06_transformer_llm/02_minigpt_language_model/attention.py", "label": "双后端实现" },
+        { "path": "week06_transformer_llm/02_minigpt_language_model/benchmark_attention.py", "label": "数值与性能对照" }
+      ],
+      "pos": [720, 440],
+      "size": [230, 82]
+    },
+    {
+      "id": "lora-extension",
+      "type": "backend",
+      "label": "LoRALinear",
+      "sublabel": "Wx + α/r · B(Ax)",
+      "tag": "可选 · 默认未接主训练",
+      "sources": [
+        { "path": "week06_transformer_llm/02_minigpt_language_model/lora.py", "label": "低秩扩展" }
+      ],
+      "pos": [720, 630],
+      "size": [180, 82]
+    },
+    {
+      "id": "generate-cli",
+      "type": "frontend",
+      "label": "生成控制器",
+      "sublabel": "sample_next + CharTokenizer.decode",
+      "tag": "naive / cached · 打印文本",
+      "sources": [
+        { "path": "week06_transformer_llm/02_minigpt_language_model/generate.py", "label": "CLI 入口" },
+        { "path": "week06_transformer_llm/02_minigpt_language_model/generation.py", "label": "自回归循环" }
+      ],
+      "pos": [40, 630],
+      "size": [180, 82]
+    },
+    {
+      "id": "kv-cache",
+      "type": "database",
+      "label": "Per-layer KV Cache",
+      "sublabel": "K,V [B,H,T,D]",
+      "tag": "past_key_values",
+      "sources": [
+        { "path": "week06_transformer_llm/02_minigpt_language_model/attention.py", "label": "缓存拼接" },
+        { "path": "week06_transformer_llm/02_minigpt_language_model/generation.py", "label": "滑动窗口重建" }
+      ],
+      "pos": [360, 630],
+      "size": [220, 82]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "离线数据管线",
+      "wraps": ["tiny-shakespeare", "data-preparation", "artifact-store"],
+      "pad": 22
+    },
+    {
+      "kind": "region",
+      "label": "MiniGPT 模型与运行时状态",
+      "wraps": ["gpt-core", "kv-cache"],
+      "pad": 24
+    }
+  ],
+  "connections": [
+    { "id": "download-text", "from": "tiny-shakespeare", "to": "data-preparation", "variant": "emphasis" },
+    { "id": "persist-artifacts", "from": "data-preparation", "to": "artifact-store", "variant": "emphasis" },
+    { "id": "load-token-tensors", "from": "artifact-store", "to": "sample-batch", "label": "token tensors", "variant": "emphasis", "fromSide": "bottom", "toSide": "top" },
+    { "id": "feed-batches", "from": "sample-batch", "to": "training-loop", "label": "[B,T] x,y", "variant": "emphasis" },
+    { "id": "optimize-model", "from": "training-loop", "to": "gpt-core", "label": "AdamW update", "variant": "emphasis", "fromSide": "bottom", "toSide": "top" },
+    { "id": "save-model", "from": "gpt-core", "to": "checkpoints", "label": "state_dict + config", "variant": "emphasis" },
+    { "id": "delegate-attention", "from": "attention-backends", "to": "gpt-core", "label": "Block 内调用", "labelDy": 24 },
+    { "id": "optional-lora", "from": "lora-extension", "to": "attention-backends", "label": "可选 projection 替换", "variant": "dashed", "fromSide": "top", "toSide": "bottom" },
+    { "id": "load-checkpoint", "from": "checkpoints", "to": "generate-cli", "label": "加载 config + weights", "variant": "emphasis", "fromSide": "bottom", "toSide": "top", "labelDy": 24 },
+    { "id": "manage-cache", "from": "generate-cli", "to": "kv-cache", "label": "cache 生命周期" },
+    { "id": "reuse-past-kv", "from": "kv-cache", "to": "gpt-core", "label": "past_key_values + 最新 token", "fromSide": "top", "toSide": "bottom" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "模型主干",
+      "items": [
+        "Token Embedding 与 Learned Position Embedding 相加后进入 N 个 Pre-LN GPT Block。",
+        "每个 Block = Causal Self-Attention + FeedForward，两处均使用残差连接。",
+        "Final LayerNorm 后由 LM Head 输出 [B,T,V]；输入 embedding 与输出投影权重共享。"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "训练闭环",
+      "items": [
+        "sample_batch 生成连续长度 T 的输入，以及右移一位的 next-token 标签。",
+        "训练使用 CrossEntropyLoss、AdamW、梯度裁剪，可在 CUDA 上开启 AMP。",
+        "周期性估计 train/val loss 与 perplexity，并保存 last.pt 和最佳 best.pt。"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "推理加速",
+      "items": [
+        "generate_naive 每一步重算整个截断上下文；generate_cached 复用各层 K/V。",
+        "Cache 已存在时只输入最新 token；长度达到 block_size 后重建最后一个滑动窗口。",
+        "greedy 模式下测试要求 naive 与 cached 生成完全相同。"
+      ]
+    }
+  ]
+}
