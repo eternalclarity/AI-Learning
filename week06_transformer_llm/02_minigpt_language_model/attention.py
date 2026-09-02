@@ -100,7 +100,7 @@ class CausalSelfAttention(nn.Module):
 
         # PyTorch SDPA
         else:
-            # 无 Cache 时直接使用高效 Causal Attention
+            # 无 Cache 时直接使用高效 Causal Attention, 适用训练阶段，无需 KV cache
             if past_len == 0:
                 y = F.scaled_dot_product_attention(
                     q, k, v,
@@ -108,7 +108,7 @@ class CausalSelfAttention(nn.Module):
                     is_causal=True,  # 高效，无需多言
                 )
             else:
-                # 有 Cache 时显式生成可见性 Mask
+                # 有 Cache 时显式生成可见性 Mask, 适用生成阶段，可以用 KV cache 加速 自回归生成
                 allowed = self._allowed_mask(q_len, key_len, past_len, x.device)  # 这里不能合并，有 KV Cache 时，q_len（2）和 key_len （10）往往不相等，而 PyTorch 的 is_causal=True 对这种 非方阵 attention 采用的是左上对齐的 causal mask，不符合 KV Cache 解码时我们需要的对齐
                 y = F.scaled_dot_product_attention(
                     q, k, v,

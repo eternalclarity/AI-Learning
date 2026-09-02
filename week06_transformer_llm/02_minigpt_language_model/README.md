@@ -39,8 +39,6 @@ Next-token CrossEntropyLoss
 | 13   | [utils.py:10](D:\\code.py\\workspace\\AI-Learning\\week06_transformer_llm\\02_minigpt_language_model\\utils.py) | 辅助文件，配合 `train.py` 阅读即可：随机种子、设备选择、JSON 保存和 CUDA 同步。 |
 | 14   | [generation.py:8](D:\\code.py\\workspace\\AI-Learning\\week06_transformer_llm\\02_minigpt_language_model\\generation.py) | 先读 `sample_next()`，再比较 `generate_naive()` 与 `generate_cached()`。重点研究 Cache 满 `block_size` 后为什么必须重建滑动窗口。 |
 | 15   | [generate.py:16](D:\\code.py\\workspace\\AI-Learning\\week06_transformer_llm\\02_minigpt_language_model\\generate.py) | 理解实际推理入口：加载 tokenizer/checkpoint → 恢复 GPT → 编码 prompt → 选择生成函数 → 解码文本。 |
-| 17   | [benchmark_attention.py:27](D:\\code.py\\workspace\\AI-Learning\\week06_transformer_llm\\02_minigpt_language_model\\benchmark_attention.py) | 先比较最大数值误差，再比较 manual/SDPA 速度，学习正确的性能测试顺序。 |
-| 18   | [benchmark_kv_cache.py:31](D:\\code.py\\workspace\\AI-Learning\\week06_transformer_llm\\02_minigpt_language_model\\benchmark_kv_cache.py) | 比较 naive/cache 的输出一致性、吞吐量、加速比和显存峰值。    |
 | 19   | [lora.py:12](D:\\code.py\\workspace\\AI-Learning\\week06_transformer_llm\\02_minigpt_language_model\\lora.py) | 最后学习扩展内容。理解冻结基础 Linear，以及 `Wx + α/r·B(Ax)`；它目前没有接入主训练链路。 |
 
 这个项目可以分成五层：数据准备、模型实现、训练、生成推理、测试与扩展。

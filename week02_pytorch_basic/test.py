@@ -1,15 +1,7 @@
-import pandas as pd
-import numpy as np
+import torch
 
-x = {
-    "m": ["male", "female", "male", "male"],
-    "x": [1, 2, 3, 4],
-    "y": [1, 2, np.nan, np.nan]
-}
+a = [1, 2, 3]
 
-x = pd.DataFrame(x)
-
-x_df = x.isnull().sum()
-x_df = x_df.loc[x_df > 0]
-print(x_df)
+x = torch.tensor(a, dtype=torch.float)
+print(x)
 
