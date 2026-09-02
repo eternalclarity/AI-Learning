@@ -34,19 +34,14 @@ Next-token CrossEntropyLoss
 | 5    | [prepare_data.py:16](D:\\code.py\\workspace\\AI-Learning\\week06_transformer_llm\\02_minigpt_language_model\\prepare_data.py) | 串起数据预处理：90/10 连续切分 → 构造 tokenizer → 编码 → 保存 `train.pt`、`val.pt` 和 `tokenizer.json`。 |
 | 6    | [dataset.py:8](D:\\code.py\\workspace\\AI-Learning\\week06_transformer_llm\\02_minigpt_language_model\\dataset.py) | 理解语言模型监督信号：`x` 是连续 token，`y` 是整体右移一位的 next-token 标签。建议手算一个长度为 5 的例子。 |
 | 7    | [model.py:84](D:\\code.py\\workspace\\AI-Learning\\week06_transformer_llm\\02_minigpt_language_model\\model.py) | 第一遍先读 `GPT.forward()`，追踪 `[B,T] → [B,T,D] → [B,T,V] → loss`，暂时不要深入 Attention 数学。 |
-| 8    | [model.py:40](D:\\code.py\\workspace\\AI-Learning\\week06_transformer_llm\\02_minigpt_language_model\\model.py) | 回头读 `Block` 和 `FeedForward`，理解 Pre-LN、两次残差连接、GELU FFN，以及 `Block × num_layers`。 |
 | 9    | [attention.py:12](D:\\code.py\\workspace\\AI-Learning\\week06_transformer_llm\\02_minigpt_language_model\\attention.py) | 项目最重要的文件。依次研究 QKV 切头、因果 mask、manual Attention、SDPA、`past_kv` 拼接和新 Cache 返回。 |
-| 10   | [tests/test_attention.py:6](D:\\code.py\\workspace\\AI-Learning\\week06_transformer_llm\\02_minigpt_language_model\\tests\\test_attention.py) | 用测试反证自己的理解：manual 与 SDPA 为什么应数值一致；Cache 为什么是 `[B,H,T,D]`。 |
-| 11   | [tests/test_kv_cache.py:6](D:\\code.py\\workspace\\AI-Learning\\week06_transformer_llm\\02_minigpt_language_model\\tests\\test_kv_cache.py) | 理解“完整序列一次前向”和“逐 token 带 Cache 前向”的 logits 为什么应该一致。 |
 | 12   | [train.py:36](D:\\code.py\\workspace\\AI-Learning\\week06_transformer_llm\\02_minigpt_language_model\\train.py) | 现在再读训练入口：加载制品 → 构造配置 → AdamW → AMP → 梯度裁剪 → 定期评估 → 保存 checkpoint。 |
 | 13   | [utils.py:10](D:\\code.py\\workspace\\AI-Learning\\week06_transformer_llm\\02_minigpt_language_model\\utils.py) | 辅助文件，配合 `train.py` 阅读即可：随机种子、设备选择、JSON 保存和 CUDA 同步。 |
 | 14   | [generation.py:8](D:\\code.py\\workspace\\AI-Learning\\week06_transformer_llm\\02_minigpt_language_model\\generation.py) | 先读 `sample_next()`，再比较 `generate_naive()` 与 `generate_cached()`。重点研究 Cache 满 `block_size` 后为什么必须重建滑动窗口。 |
 | 15   | [generate.py:16](D:\\code.py\\workspace\\AI-Learning\\week06_transformer_llm\\02_minigpt_language_model\\generate.py) | 理解实际推理入口：加载 tokenizer/checkpoint → 恢复 GPT → 编码 prompt → 选择生成函数 → 解码文本。 |
-| 16   | [tests/test_generation.py:7](D:\\code.py\\workspace\\AI-Learning\\week06_transformer_llm\\02_minigpt_language_model\\tests\\test_generation.py) | 理解为什么用 greedy 验证 naive/cache 完全一致；随机采样不能作为严格等价测试。 |
 | 17   | [benchmark_attention.py:27](D:\\code.py\\workspace\\AI-Learning\\week06_transformer_llm\\02_minigpt_language_model\\benchmark_attention.py) | 先比较最大数值误差，再比较 manual/SDPA 速度，学习正确的性能测试顺序。 |
 | 18   | [benchmark_kv_cache.py:31](D:\\code.py\\workspace\\AI-Learning\\week06_transformer_llm\\02_minigpt_language_model\\benchmark_kv_cache.py) | 比较 naive/cache 的输出一致性、吞吐量、加速比和显存峰值。    |
 | 19   | [lora.py:12](D:\\code.py\\workspace\\AI-Learning\\week06_transformer_llm\\02_minigpt_language_model\\lora.py) | 最后学习扩展内容。理解冻结基础 Linear，以及 `Wx + α/r·B(Ax)`；它目前没有接入主训练链路。 |
-| 20   | [tests/test_lora.py:7](D:\\code.py\\workspace\\AI-Learning\\week06_transformer_llm\\02_minigpt_language_model\\tests\\test_lora.py) | 验证 LoRA 初始化时为什么等价于原 Linear，以及哪些参数可训练。 |
 
 这个项目可以分成五层：数据准备、模型实现、训练、生成推理、测试与扩展。
 
