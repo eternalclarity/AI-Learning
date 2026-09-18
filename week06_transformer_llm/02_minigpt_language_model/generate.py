@@ -85,7 +85,7 @@ def generate_cached(model, input_ids: torch.Tensor, max_new_tokens: int, tempera
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--prompt", type=str, default="ROMEO:")   # 设置文本生成的初始提示词
+    parser.add_argument("--prompt", type=str, default="Have the patricians of you. For your wants,")   # 设置文本生成的初始提示词
     parser.add_argument("--checkpoint", type=Path, default=ROOT / "outputs" / "checkpoints" / "best.pt")  # 设置模型 checkpoint 路径
     parser.add_argument("--artifact-dir", type=Path, default=ROOT / "artifacts")  # 设置 tokenizer 等数据文件目录
     parser.add_argument("--max-new-tokens", type=int, default=300)  # 设置最多生成多少个新 token
@@ -95,6 +95,9 @@ def main() -> None:
     parser.add_argument("--use-cache", action="store_true")  # 是否使用 KV Cache 加速生成
     parser.add_argument("--device", type=str, default="auto")  # 设置运行设备，auto 表示自动选择
     args = parser.parse_args()
+
+    prompt = input("Mini_GPT! What do you want input?\n")
+    args.prompt = prompt
 
     device = resolve_device(args.device)
     tokenizer = CharTokenizer.load(args.artifact_dir / "tokenizer.json")
