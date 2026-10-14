@@ -137,3 +137,34 @@ batch lengths = 47, 82, 61, 100
 ```
 
 而不是整个 IMDB 全部补到 512。
+
+
+
+## 学习顺序
+
+```python
+README.md
+   ↓
+predict.py
+   ↓
+data.py
+   ↓
+strategies.py
+   ↓
+train.py
+   ↓
+engine.py
+   ↓
+metrics.py
+   ↓
+evaluate.py
+   ↓
+compare_strategies.py
+   ↓
+prepare_data.py
+   ↓
+download_data.py
+   ↓
+utils.py
+```
+
