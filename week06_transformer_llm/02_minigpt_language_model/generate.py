@@ -21,6 +21,7 @@ def sample_next(logits: torch.Tensor, temperature: float = 1.0, top_k: int | Non
 
     # Greedy (贪心解码)模式或 temperature<=0 时，直接选择最大 logits
     if greedy or temperature <= 0:
+        # ，如果将温度设置为 0，则 Top-k 和 Top-p 将变得无关紧要，因为最有可能的 Token 将成为下一个预测的 Token
         return logits.argmax(dim=-1, keepdim=True)
 
     # 用 temperature 调整 logits 的尖锐程度, temperature越小，概率更尖锐，更确定； temperature越大，概率更平坦，更随机
